@@ -6,17 +6,28 @@ import java.util.Scanner;
 public class Minesweeper {
 
     private int fieldHidden[][] = new int[10][10];
-    private int fieldVisible[][] = new int[10][10]; //the game needs one board that's got a player board and a visible board
+    private int fieldVisible[][] = new int[10][10]; //the game needs a player board and a visible board
 
 
     
     public boolean playMove() { //play move scan the row and number
         Scanner sc = new Scanner(System.in);
-        System.out.println("\nEnter Row Number: ");
+        
+        /*System.out.println("\nEnter Row Number: "); //split this into two inputs (?) 
         int i = sc.nextInt();
         System.out.println("Enter Column Number");
         int j = sc.nextInt();
-        //Change these into where would you like to dig
+        */
+        System.out.println("\nWhere would you like to dig? Input as row, col: 4,1");
+        String input = sc.nextLine();
+        String inputReplaced = input.replace(",", " ");
+        String[] numbers = inputReplaced.split(" ");
+
+        String row = numbers[0];
+        String column = numbers[1];
+        int i = Integer.parseInt(row);
+        int j = Integer.parseInt(column);
+        //Change these into where would you like to dig -> completed
 
         if(i < 0 || i >9 || j<0 || j>9 || fieldVisible[i][j] != 0) {
             System.out.println("\nIncorrect Input!");
@@ -42,9 +53,9 @@ public class Minesweeper {
     public void fixVisible(int i, int j) {
         fieldVisible[i][j] = 50;
         if (i != 0) {
-            fieldVisible[i -1][j -1] = fieldHidden[i-1][j-1];
-            if (fieldVisible[i-1][j-1]==0) {
-                fieldVisible[i-1][j-1] = 50;
+            fieldVisible[i -1][j] = fieldHidden[i-1][j];
+            if (fieldVisible[i-1][j]==0) {
+                fieldVisible[i-1][j] = 50;
             }
             if (j != 0) {
                 fieldVisible[i-1][j-1] = fieldHidden[i-1][j-1];
@@ -54,7 +65,7 @@ public class Minesweeper {
             }
         }
         if (i != 9) {
-            fieldVisible[i+1][j] = fieldHidden[i+1][j+1];
+            fieldVisible[i+1][j] = fieldHidden[i+1][j];
             if(fieldVisible[i+1][j]==0)
                 fieldVisible[i+1][j] = 50;
             if(j != 9) {
@@ -235,7 +246,7 @@ public class Minesweeper {
 
     public boolean checkWin() {
         for (int i=0; i<10; i++) {
-            for (int j= 0; j<-1; j++) {
+            for (int j= 0; j<10; j++) {
                 if(fieldVisible[i][j]== 0) {
                     if (fieldHidden[i][j] != 100) {
                         return false;
